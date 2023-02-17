@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/pixi.min.js"></script>
+    <script>
+        let app;
+        let brim;
+        let reyna;
+        let omen;
+        let rein;
+        let ana;
+        let tracer;
+        let sprites = [];
+        let keys = {};
+        let bullets = [];
+        let bulletSpeed = 20;
+        let collisionCheck = 0;
+
+        window.onload = function () {
+            app = new PIXI.Application(
+                {
+                    width: 800,
+                    height: 600,
+                    backgroundColor: 0xff99df
+                }
+            );
+
+            document.querySelector("#gameDiv").appendChild(app.view);
+            app.stage.interactive = true;
+            document.querySelector("#gameDiv").addEventListener("pointerdown", fireBullet);
+
+            //Making an instance of the sprite
+            brim = new PIXI.Sprite.from("images/tankSpriteBlue.png");
+            brim.anchor.set(0.5);
+            brim.x = app.view.width / 2;
+            brim.y = app.view.height / 3;
+            sprites.push(brim);
+
+            app.stage.addChild(brim);
+
+            //Making an instance of the sprite
+            reyna = new PIXI.Sprite.from("images/supportSpriteBlue.png");
+            reyna.anchor.set(0.5);
+            reyna.x = app.view.width / 3;
+            reyna.y = app.view.height / 4;
+            sprites.push(reyna);
+
+            app.stage.addChild(reyna);
+
+            //Making an instance of the sprite
+            omen = new PIXI.Sprite.from("images/damageSpriteBlue.png");
+            omen.anchor.set(0.5);
+            omen.x = app.view.width / 1.5;
+            omen.y = app.view.height / 4;
+            sprites.push(omen);
+
+            app.stage.addChild(omen);
+
+            //Making an instance of the sprite
+            rein = new PIXI.Sprite.from("images/tankSpriteRed.png");
+            rein.anchor.set(0.5);
+            rein.x = app.view.width / 2;
+            rein.y = app.view.height / 1.5;
+            rein.up = true;
+            rein.left = true;
+            rein.down = true;
+            rein.right = true;
+
+            app.stage.addChild(rein);
+
+            //Making an instance of the sprite
+            /*
+            ana = new PIXI.Sprite.from("images/supportSpriteRed.png");
+            ana.anchor.set(0.5);
+            ana.x = app.view.width / 1.5;
+            ana.y = app.view.height / 1.2;
+            sprites.push(ana);
+            
+
+            app.stage.addChild(ana);
+            */
+            
+
+            createSprite("images/supportSpriteRed.png", 1.5, 1.2);
+
+            //Making an instance of the sprite
+            tracer = new PIXI.Sprite.from("images/damageSpriteRed.png");
+            tracer.anchor.set(0.5);
+            tracer.x = app.view.width / 3;
+            tracer.y = app.view.height / 1.2;
+            sprites.push(tracer);
+
+            app.stage.addChild(tracer);
+
+            /*
+            //Mouse interactions
+            app.stage.interactive = true;
+            app.stage.on("pointermove", movePlayer);
+            */
+
+            //Keyboard event handlers
+            window.addEventListener("keydown", keysDown);
+            window.addEventListener("keyup", keysUp);
+
+            app.ticker.add(gameLoop);
+                
+
+        }
+
+        function keysDown(e) {
+            //console.log(e.keycode);
+            /*
+            w = 87
+            a = 65
+            s = 83
+            d = 68
+            e = 69
+            */
+            
+            keys[e.keyCode] = true;
+
+        }
+
+        function keysUp(e) {
+            //console.log(e.keycode);
+
+            keys[e.keyCode] = false;
+
+        }
+
+
+        function gameLoop() {
+
+            // W
+            if(keys["87"] && rein.up) {
+                rein.y -= 2;
+            }
+            if(keys["87"])
+            {
+                //console.log(rein.up);
+            }
+            // A
+            if(keys["65"] && rein.left) {
+                rein.x -= 2;
+            }
+            // S
+            if(keys["83"] && rein.down) {
+                rein.y += 2;
+            }
+            // D
+            if(keys["68"] && rein.right) {
+                //rein.up = true;
+                //console.log(rein.up);
+                //console.log("Anything?");
+                rein.x += 2;
+            }
+            //P
+            if(keys["80"])
+            {
+                console.log("bBox.x = " + brim.getBounds().x);
+                console.log("bBox.y = " + brim.getBounds().y);
+                console.log("bBox.width = " + brim.getBounds().width);
+                console.log("bBox.height = " + brim.getBounds().height);
+                //console.log("bBox.x + bBox.width = " + brim.getBounds().x + brim.getBounds().width);
+                //console.log("bBox.y + bBox.height = " + brim.getBounds().x + brim.getBounds().height);
+            }
+            //E
+            if(keys["69"])
+            {
+                //console.log("aBox.y = " + rein.getBounds().y);
+                let i = 0;
+                let l = sprites.length;
+                while(i<l)
+                {
+                    console.log(sprites[i]);
+                    i++;
+                }
+                
+                
+            }
+            //Q
+            if(keys["81"])
+            {
+                console.log("aBox.x = " + rein.getBounds().x);
+            }
+
+            updateBullets();
+
+            anyIntersect(rein);
+
+        }
+
+            
+
+        // This function takes 2 sprites as inputs and checks if they are touching
+        function spritesIntersect(a,b)
+        {
+            let aBox = a.getBounds();
+            let bBox = b.getBounds();
+
+            return aBox.x + aBox.width > bBox.x &&
+                   aBox.x < bBox.x + bBox.width &&
+                   aBox.y + aBox.height > bBox.y &&
+                   aBox.y < bBox.y + bBox.height;
+        }
+
+        function whichIntersect(a,b)
+        {
+            let aBox = a.getBounds();
+            let bBox = b.getBounds();
+
+            let up = 0;
+            let down = 0;
+            let left = 0;
+            let right = 0;
+
+            left = aBox.x + aBox.width;
+            right = aBox.x - bBox.width;
+            up = aBox.y - bBox.height;
+            down = aBox.y + aBox.height;
+
+            let leftCheck = left - bBox.x;
+            if(leftCheck < 0)
+                leftCheck *= -1;
+
+            let rightCheck = right - bBox.x;
+            if(rightCheck < 0)
+                rightCheck *= -1;
+
+            let upCheck = up - bBox.y;
+            if(upCheck < 0)
+                upCheck *= -1;
+
+            let downCheck = down - bBox.y;
+            if(downCheck < 0)
+                downCheck *= -1;
+
+            let check = Math.min(leftCheck, rightCheck, upCheck, downCheck);
+            collisionCheck = check;
+            console.log("The value of check is: " + check);
+            console.log("The value of upCheck is: " + upCheck);
+            console.log("The value of downCheck is: " + downCheck);
+            console.log("The value of leftCheck is: " + leftCheck);
+            console.log("The value of rightCheck is: " + rightCheck);
+
+            if (check == upCheck)
+            {
+                return 3;
+            }
+            else if (check == downCheck)
+            {
+                return 4;
+            }
+            else if (check == leftCheck)
+            {
+                return 2;
+            }
+            else if (check == rightCheck)
+            {
+                return 1;
+            }
+            
+            else
+            {
+                return 0;
+            }
+
+            
+        }
+
+        function anyIntersect(rein)
+        {
+            let i = 0;
+            let l = sprites.length;
+            let b = true;
+
+            while(i<l)
+            {
+                if(spritesIntersect(rein,sprites[i]))
+                {
+                    disableMovement(whichIntersect(rein,sprites[i]))
+                    b = false;
+                }
+                i++;
+            }
+            if(b)
+            {
+                rein.left = true;
+                rein.right = true;
+                rein.up = true;
+                rein.down = true;
+            }
+        }
+
+        function disableMovement(check)
+        {
+            switch(check)
+                {
+                    case 1:
+                        rein.left = false;
+                        rein.x += collisionCheck;
+                        break;
+                    case 2:
+                        rein.right = false;
+                        rein.x -= collisionCheck;
+                        break;
+                    case 3:
+                        rein.up = false;
+                        rein.y += collisionCheck;
+                        break;
+                    case 4:
+                        rein.down = false;
+                        rein.y -= collisionCheck;
+                }
+        }
+
+        function fireBullet(e)
+        {
+
+            let bullet = createBullet();
+            bullets.push(bullet);
+
+        }
+
+        function createBullet(){
+
+            let bullet = new PIXI.Sprite.from("images/bullet.png");
+            bullet.anchor.set(0.5);
+            bullet.x = rein.x;
+            bullet.y = rein.y;
+            bullet.speed = bulletSpeed;
+            app.stage.addChild(bullet);
+
+            return bullet;
+
+        }
+
+        function updateBullets()
+        {
+            for (let i = 0; i < bullets.length; i++)
+            {
+                bullets[i].position.y -= bullets[i].speed;
+
+                if (bullets[i].position.y < 0)
+                {
+                    app.stage.removeChild(bullets[i]);
+                    bullets.splice(i,1);
+                }
+            }
+
+
+        }
+        
+        function createSprite(image, x, y)
+        {
+            sprite = new PIXI.Sprite.from(image);
+            sprite.anchor.set(0.5);
+            sprite.x = app.view.width / x;
+            sprite.y = app.view.height / y;
+            sprites.push(sprite);
+
+            app.stage.addChild(sprite);
+            return sprite;
+        }
+        
+
+        /*
+        function movePlayer(e)
+        {
+            let pos = e.data.global
+
+            brim.x = pos.x;
+            brim.y = pos.y;
+
+
+        }
+        */
+        
+
+
+    </script>
+
+
+</head>
+<body>
+
+    <div id = "gameDiv" style = "border: 2px solid red;"></div>
+    
+</body>
+</html>
