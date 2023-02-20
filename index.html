@@ -21,6 +21,7 @@
         //let reynaSheet = createPlayerSheet("images/tankSheetBlue.png");
         //let omenSheet = createPlayerSheet("images/dpsSheetBlue.png");
         let app;
+        let b = true;
         let mainScreen;
         let brim;
         let reyna;
@@ -29,6 +30,10 @@
         let ana;
         let tracer;
         let sprite;
+        let vWall1;
+        let vWall2;
+        let hWall1;
+        let hWall2;
         let testArray = ['chicken', 'BAKAW!'];
         let sprites = [];
         let texts = [];
@@ -91,6 +96,15 @@
             //Making an instance of the sprite
             tracer = createSprite("images/damageSpriteRed.png", 3, 1.2, "red");
 
+            vWall1 = createSpriteByPixel("images/verticalwall.png", 180, 492, "wall");
+            vWall2 = createSpriteByPixel("images/verticalwall.png", 640, 492, "wall");
+
+            hWall1 = createSpriteByPixel("images/horizontalWall.png", 253, 192, "wall");
+            hWall2 = createSpriteByPixel("images/horizontalWall.png", 566, 192, "wall");
+
+            hWall3 = createSpriteByPixel("images/horizontalWall120.png", 120, 242, "wall");
+            hWall4 = createSpriteByPixel("images/horizontalWall120.png", 699, 242, "wall");
+
             //Keyboard event handlers
             window.addEventListener("keydown", keysDown);
             window.addEventListener("keyup", keysUp);
@@ -129,7 +143,7 @@
             //world.scale.set(whatever you want)
             //world.rotation = some_rotation
 
-            
+            //console.log("rein.up = " + rein.up);
 
             // W
             if(keys["87"] && rein.up) {
@@ -177,10 +191,16 @@
                 console.log("aBox.x = " + rein.getBounds().x);
             }
             //console.log("Gameloop");
+            //console.log("rein position 1: " + rein.y);
+            
             mainScreen.position.x = (rein.x - app.view.width / 2) * -1;
             mainScreen.position.y = (rein.y - app.view.width / 2) * -1;
+            
+            
             //mainScreen.pivot.x = rein.x;
             //mainScreen.pivot.y = rein.y;
+
+            //console.log("rein position 2: " + rein.y);
 
             updateBullets();
             anyIntersect(rein);
@@ -231,6 +251,18 @@
 
                     //console.log("We updatin invuln yo");
                 i++;
+            }
+        }
+
+        function changeFlag(flag)
+        {
+            if(flag == true)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
 

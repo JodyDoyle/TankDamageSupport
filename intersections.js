@@ -4,10 +4,10 @@ function spritesIntersect(a,b)
     let aBox = a.getBounds();
     let bBox = b.getBounds();
 
-    return aBox.x + aBox.width > bBox.x &&
-           aBox.x < bBox.x + bBox.width &&
-           aBox.y + aBox.height > bBox.y &&
-           aBox.y < bBox.y + bBox.height;
+    return aBox.x + aBox.width >= bBox.x &&
+           aBox.x <= bBox.x + bBox.width &&
+           aBox.y + aBox.height >= bBox.y &&
+           aBox.y <= bBox.y + bBox.height;
 }
 
 //Checks which direction two sprites are intersecting and returns the appropriate integer
@@ -41,6 +41,7 @@ function whichIntersect(a,b)
     let downCheck = down - bBox.y;
     if(downCheck < 0)
         downCheck *= -1;
+        
 
     let check = Math.min(leftCheck, rightCheck, upCheck, downCheck);
     collisionCheck = check;
@@ -106,12 +107,12 @@ function checkBulletCollision()
         {
             if(spritesIntersect(bullets[i],sprites[j]) && sprites[j].invuln <= 0 && bullets[i].team != sprites[j].team)
             {
-                console.log("A bullet hit " + sprites[j].name);
+                console.log("A bullet hit " + i);
                 //console.log("The bullet's team was " + bullets[i].team);
                 // Need to add invulnerability frames and deprecate health and check for death when a sprite is hit by a bullet
                 // Need to also check if the sprite is friend or foe when checking if the sprite should take damage
                 // Should probably also remove the bullet once it damaged someone
-                app.stage.removeChild(bullets[i]);
+                mainScreen.removeChild(bullets[i]);
                 bullets.splice(i,1);
                 l--;
                 
