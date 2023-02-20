@@ -18,7 +18,7 @@ function createSprite(image, x, y, wTeam)
     console.log("I am " + sprite.team + " team!");
     sprites.push(sprite);
 
-    app.stage.addChild(sprite);
+    mainScreen.addChild(sprite);
     return sprite;
 }
 
@@ -37,7 +37,7 @@ function createText(text, x, y, font)
         fontFamily: font,
     });
     texts.push(text);
-    app.stage.addChild(text);
+    mainScreen.addChild(text);
     console.log('Text created!');
     return text;
 }
@@ -76,7 +76,7 @@ function createAnimatedSprite(image, x, y, wTeam)
     sprite.sheet = poSheet;
     sprites.push(sprite);
 
-    app.stage.addChild(sprite);
+    mainScreen.addChild(sprite);
     sprite.play();
     return sprite;
 }

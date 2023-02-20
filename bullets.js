@@ -12,7 +12,7 @@ function createBullet(){
     bullet.y = rein.y;
     bullet.speed = bulletSpeed;
     bullet.team = playerTeam;
-    app.stage.addChild(bullet);
+    mainScreen.addChild(bullet);
 
     return bullet;
 
@@ -26,7 +26,7 @@ function updateBullets()
 
         if (bullets[i].position.y < 0)
         {
-            app.stage.removeChild(bullets[i]);
+            mainScreen.removeChild(bullets[i]);
             bullets.splice(i,1);
         }
     }
