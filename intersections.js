@@ -41,7 +41,7 @@ function whichIntersect(a,b)
     let downCheck = down - bBox.y;
     if(downCheck < 0)
         downCheck *= -1;
-        
+
 
     let check = Math.min(leftCheck, rightCheck, upCheck, downCheck);
     collisionCheck = check;
@@ -116,14 +116,17 @@ function checkBulletCollision()
                 bullets.splice(i,1);
                 l--;
                 
-
-                sprites[j].invuln += 80;
-                sprites[j].health -= 10;
-                //console.log((playerSheet));
-                sprites[j].textures = sprites[j].sheet.invulnerable;
-                sprites[j].play();
-                console.log(sprites[j].health);
-                //checkForDeath(sprites[j]);
+                if(sprites[j].team != "wall")
+                {
+                    sprites[j].invuln += 80;
+                    sprites[j].health -= 10;
+                    //console.log((playerSheet));
+                    sprites[j].textures = sprites[j].sheet.invulnerable;
+                    sprites[j].play();
+                    console.log(sprites[j].health);
+                    //checkForDeath(sprites[j]);
+                }
+                
 
                 if(i==l)
                 {

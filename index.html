@@ -20,6 +20,7 @@
         //let brimSheet = createPlayerSheet("images/tankSheetBlue.png");
         //let reynaSheet = createPlayerSheet("images/tankSheetBlue.png");
         //let omenSheet = createPlayerSheet("images/dpsSheetBlue.png");
+        //let currentHealth;
         let app;
         let b = true;
         let mainScreen;
@@ -34,13 +35,23 @@
         let vWall2;
         let hWall1;
         let hWall2;
+        let hWall3;
+        let hWall4;
+        let vWall3;
+        let vWall4;
+        let vWall5;
+        let vWall6;
+        let vWall7;
+        let vWall8;
+        let vWall9;
+        let vWall10;
         let testArray = ['chicken', 'BAKAW!'];
         let sprites = [];
         let texts = [];
         let keys = {};
         let playerSheet = {};
         let bullets = [];
-        let bulletSpeed = 10;
+        let bulletSpeed = 5;
         let collisionCheck = 0;
         let wait = false;
         let playerTeam = "red" //This will update at the start of the game depending on which team the player is on
@@ -49,7 +60,7 @@
             app = new PIXI.Application(
                 {
                     width: 800,
-                    height: 600,
+                    height: 2000,
                     backgroundColor: 0xff99df
                 }
             );
@@ -62,27 +73,27 @@
             mainScreen = new PIXI.Container();
             app.stage.addChild(mainScreen);
 
-            currentHealth = createText("100/100", 2, 100, "james");
+            //currentHealth = createText("100/100", 2, 100, "james");
 
             document.querySelector("#gameDiv").addEventListener("pointerdown", fireBullet);
 
             //Making an instance of the sprite
-            brim = createAnimatedSprite("images/tankSheetBlue.png", 2, 3, "blue");
+            brim = createAnimatedSpriteByPixel("images/tankSheetBlue.png", 400, 1750, "blue");
 
             //Making an instance of the sprite
-            reyna = createAnimatedSprite("images/supportSheetBlue.png", 3, 4, "blue");
+            reyna = createAnimatedSpriteByPixel("images/supportSheetBlue.png", 266, 1700, "blue");
             //reyna.name = "reyna";
             //reyna = createSprite("images/supportSpriteBlue.png", 3, 4, "blue");
             //reyna.setTexture = "images/supportSpriteRed.png"
 
             //Making an instance of the sprite
-            omen = createAnimatedSprite("images/damageSheetBlue.png", 1.5, 4, "blue");
+            omen = createAnimatedSpriteByPixel("images/damageSheetBlue.png", 600, 1700, "blue");
 
             //Making an instance of the sprite
             rein = new PIXI.Sprite.from("images/tankSpriteRed.png");
             rein.anchor.set(0.5);
-            rein.x = app.view.width / 2;
-            rein.y = app.view.height / 1.5;
+            rein.x = 400;
+            rein.y = 1850;
             rein.up = true;
             rein.left = true;
             rein.down = true;
@@ -91,10 +102,10 @@
 
             mainScreen.addChild(rein);
 
-            ana = createSprite("images/supportSpriteRed.png", 1.5, 1.2, "red");
+            ana = createSpriteByPixel("images/supportSpriteRed.png", 600, 1900, "red");
 
             //Making an instance of the sprite
-            tracer = createSprite("images/damageSpriteRed.png", 3, 1.2, "red");
+            tracer = createSpriteByPixel("images/damageSpriteRed.png", 266, 1900, "red");
 
             vWall1 = createSpriteByPixel("images/verticalwall.png", 180, 492, "wall");
             vWall2 = createSpriteByPixel("images/verticalwall.png", 640, 492, "wall");
@@ -104,6 +115,18 @@
 
             hWall3 = createSpriteByPixel("images/horizontalWall120.png", 120, 242, "wall");
             hWall4 = createSpriteByPixel("images/horizontalWall120.png", 699, 242, "wall");
+
+            vWall3 = createSpriteByPixel("images/verticalWall.png", 180, 1808, "wall");
+            vWall4 = createSpriteByPixel("images/verticalWall.png", 640, 1808, "wall");
+
+            vWall5 = createSpriteByPixel("images/verticalWall.png", 180, 1400, "wall");
+            vWall6 = createSpriteByPixel("images/verticalWall.png", 640, 1400, "wall");
+
+            vWall7 = createSpriteByPixel("images/verticalWall.png", 180, 900, "wall");
+            vWall8 = createSpriteByPixel("images/verticalWall.png", 640, 900, "wall");
+
+            //vWall9 = createSpriteByPixel("images/verticalWall.png", 180, 400, "wall");
+            //vWall10 = createSpriteByPixel("images/verticalWall.png", 640, 400, "wall");
 
             //Keyboard event handlers
             window.addEventListener("keydown", keysDown);

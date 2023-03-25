@@ -43,23 +43,49 @@ function createSpriteByPixel(image, x, y, wTeam)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////// Text Creation Functions ///////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////// Animated Sprite Functions ///////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function createText(text, x, y, font)
+function createAnimatedSprite(image, x, y, wTeam)
 {
-    text = new PIXI.Text(text);
-    text.x = app.view.width/x;
-    text.y = app.view.width/y;
-    text.anchor.set(0.5);
-    text.style = new PIXI.TextStyle({
-        fontSize: 24,
-        fontFamily: font,
-    });
-    texts.push(text);
-    mainScreen.addChild(text);
-    console.log('Text created!');
-    return text;
+    let poSheet = createPlayerSheet(image);
+    console.log("poSheet = " + poSheet.regularSprite);
+    sprite = new PIXI.AnimatedSprite(poSheet.regularSprite);
+    sprite.anchor.set(0.5);
+    sprite.animationSpeed = 0.04;
+    sprite.loop= true;
+    sprite.x = app.view.width / x;
+    sprite.y = app.view.height / y;
+    sprite.health = 100;
+    sprite.invuln = 0;
+    sprite.team = wTeam;
+    sprite.sheet = poSheet;
+    sprites.push(sprite);
+
+    mainScreen.addChild(sprite);
+    sprite.play();
+    return sprite;
+}
+
+function createAnimatedSpriteByPixel(image, x, y, wTeam)
+{
+    let poSheet = createPlayerSheet(image);
+    console.log("poSheet = " + image.naturalHeight);
+    sprite = new PIXI.AnimatedSprite(poSheet.regularSprite);
+    sprite.anchor.set(0.5);
+    sprite.animationSpeed = 0.04;
+    sprite.loop= true;
+    sprite.x = x;
+    sprite.y = y;
+    sprite.health = 100;
+    sprite.invuln = 0;
+    sprite.team = wTeam;
+    sprite.sheet = poSheet;
+    sprites.push(sprite);
+
+    mainScreen.addChild(sprite);
+    sprite.play();
+    return sprite;
 }
 
 function createPlayerSheet(image)
@@ -80,24 +106,23 @@ function createPlayerSheet(image)
     return pSheet;
 }
 
-function createAnimatedSprite(image, x, y, wTeam)
-{
-    let poSheet = createPlayerSheet(image);
-    console.log("poSheet = " + poSheet.regularSprite);
-    sprite = new PIXI.AnimatedSprite(poSheet.regularSprite);
-    sprite.anchor.set(0.5);
-    sprite.animationSpeed = 0.04;
-    sprite.loop= true;
-    sprite. x = app.view.width / x;
-    sprite.y = app.view.height / y;
-    sprite.health = 100;
-    sprite.invuln = 0;
-    sprite.team = wTeam;
-    sprite.sheet = poSheet;
-    sprites.push(sprite);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////// Text Creation Functions ///////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    mainScreen.addChild(sprite);
-    sprite.play();
-    return sprite;
+function createText(text, x, y, font)
+{
+    text = new PIXI.Text(text);
+    text.x = app.view.width/x;
+    text.y = app.view.width/y;
+    text.anchor.set(0.5);
+    text.style = new PIXI.TextStyle({
+        fontSize: 24,
+        fontFamily: font,
+    });
+    texts.push(text);
+    mainScreen.addChild(text);
+    console.log('Text created!');
+    return text;
 }
 
